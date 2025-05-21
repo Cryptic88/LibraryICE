@@ -1,0 +1,51 @@
+﻿@model IEnumerable<LibraryICE.Models.Book>
+@using Microsoft.AspNetCore.Mvc.Rendering
+
+<h2>Books</h2>
+
+<p>
+    <a asp-action="Create" class="btn btn-success mb-3">Add New Book</a>
+</p>
+
+<form method="get" asp-action="Index" class="row g-2 mb-4">
+    <div class="col-md-5">
+        <input type="text" name="searchString" value="@Context.Request.Query["searchString"]" class="form-control" placeholder="Search by title or author" />
+    </div>
+    <div class="col-md-4">
+        <select name="selectedType" class="form-select">
+            <option value="">All Book Types</option>
+            @foreach (var type in ViewBag.BookTypes as SelectList)
+            {
+                <option value="@type.Text" selected="@(Context.Request.Query["selectedType"] == type.Text ? "selected" : null)">
+                    @type.Text
+                </option>
+            }
+        </select>
+    </div>
+    <div class="col-md-3">
+        <button type="submit" class="btn btn-primary w-100">Search</button>
+    </div>
+</form>
+
+<table class="table table-striped">
+    <thead class="table-dark">
+        <tr>
+            <th>Title</th>
+            <th>Author</th>
+            <th>ISBN</th>
+            <th>Type</th>
+        </tr>
+    </thead>
+    <tbody>
+        @foreach (var book in Model)
+        {
+            <tr>
+                <td>@book.Title</td>
+                <td>@book.Author</td>
+                <td>@book.ISBN</td>
+                <td>@book.Type?.Type</td>
+            </tr>
+        }
+    </tbody>
+</table>
+

@@ -1,0 +1,48 @@
+﻿@model IEnumerable<LibraryICE.Models.Loan>
+@using Microsoft.AspNetCore.Mvc.Rendering
+
+<h2>Loans</h2>
+
+<p>
+    <a asp-action="Create" class="btn btn-success mb-3">Add New Loan</a>
+</p>
+
+<form method="get" asp-action="Index" class="row g-2 mb-4">
+    <div class="col-md-5">
+        <input type="text" name="searchTerm" value="@Context.Request.Query["searchTerm"]" class="form-control" placeholder="Search by Book Title" />
+    </div>
+    <div class="col-md-4">
+        <select name="selectedType" class="form-select">
+            <option value="">All Book Types</option>
+            @foreach (var type in ViewBag.BookTypes as SelectList)
+            {
+                <option value="@type.Text" selected="@(Context.Request.Query["selectedType"] == type.Text ? "selected" : null)">
+                    @type.Text
+                </option>
+            }
+        </select>
+    </div>
+    <div class="col-md-3">
+        <button type="submit" class="btn btn-primary w-100">Search</button>
+    </div>
+</form>
+
+<table class="table table-striped">
+    <thead class="table-dark">
+        <tr>
+            <th>Book Title</th>
+            <th>Book Type</th>
+            <th>Loan Date</th>
+        </tr>
+    </thead>
+    <tbody>
+        @foreach (var loan in Model)
+        {
+            <tr>
+                <td>@loan.Book?.Title</td>
+                <td>@loan.Book?.Type?.Type</td>
+                <td>@loan.LoanDate.ToShortDateString()</td>
+            </tr>
+        }
+    </tbody>
+</table>
